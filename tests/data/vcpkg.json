@@ -1,0 +1,27 @@
+{
+  "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg/master/scripts/vcpkg.schema.json",
+  "name": "leafhopper",
+  "version": "0.1.0",
+  "$builtin-baseline-comment": "a commit within the vcpkg repository that establishes a minimum version on every dependency",
+  "builtin-baseline": "c168ce4e765409509c9c482faa0468c4e1ab386b",
+  "dependencies": [
+    "librdkafka",
+    {
+      "name": "arrow",
+      "default-features": true,
+      "features": [
+        "csv",
+        "filesystem"
+      ]
+    },
+    "ip2region",
+    "zstd"
+  ],
+  "overrides": [
+    {
+      "name": "boost-interprocess",
+      "version": "1.75.0",
+      "$comment": "lock boost-interprocess to avoid undeclared identifier 'posix_fallocate' on mac, revisit later"
+    }
+  ]
+}
