@@ -15,6 +15,7 @@ def test_load_vcpkg_package():
     names = {pkg_info["name"] for pkg_info in pkg_infos}
     for pkg in ["librdkafka", "arrow", "ip2region", "zstd"]:
         assert pkg in names
+    assert "homepage" in pkg_infos[1]
 
 
 def test_github_homepage():

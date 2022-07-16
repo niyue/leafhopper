@@ -7,6 +7,7 @@ PKG_INFOS = [
         "name": "arrow",
         "version": "8.0",
         "license": "Apache 2.0",
+        "homepage": "http://arrow.apache.org/",
         "description": "memory format",
     },
 ]
@@ -19,6 +20,7 @@ def test_write_csv_table():
     assert '"name","description","version","homepage","license"' in csv
     assert "librdkafka" in csv
     assert "arrow" in csv
+    assert "arrow.apache.org" in csv
 
 
 def test_write_markdown_table():

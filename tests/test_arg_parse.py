@@ -20,11 +20,40 @@ def test_empty_args():
 
 def test_vcpkg_json_with_json_format():
     args = parse_sys_args(["vcpkg.json", "--format", "json"])
-    assert_dict_equal(args, {"file": ["vcpkg.json"], "format": "json", "output": None})
+    assert_dict_equal(
+        args,
+        {
+            "file": ["vcpkg.json"],
+            "format": "json",
+            "output": None,
+            "logging_level": None,
+        },
+    )
 
 
 def test_vcpkg_json_with_invalid_format():
     args = parse_sys_args(["vcpkg.json", "--format", "no_such_format"])
     assert_dict_equal(
-        args, {"file": ["vcpkg.json"], "format": "no_such_format", "output": None}
+        args,
+        {
+            "file": ["vcpkg.json"],
+            "format": "no_such_format",
+            "output": None,
+            "logging_level": None,
+        },
+    )
+
+
+def test_logging_level():
+    args = parse_sys_args(
+        ["vcpkg.json", "--format", "json", "--logging-level", "debug"]
+    )
+    assert_dict_equal(
+        args,
+        {
+            "file": ["vcpkg.json"],
+            "format": "json",
+            "output": None,
+            "logging_level": "debug",
+        },
     )
