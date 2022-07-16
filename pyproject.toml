@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "leafhopper"
-version = "0.1.1"
-description = "A command line for generating project dependencies table"
+version = "0.2.0"
+description = "A command line tool for generating project dependencies table"
 authors = ["Yue Ni <niyue.com@gmail.com>"]
 homepage = "https://github.com/niyue/leafhopper"
 license = "Apache-2.0"
@@ -9,6 +9,7 @@ license = "Apache-2.0"
 [tool.poetry.dependencies]
 python = "^3.9"
 pytablewriter = {extras = ["html"], version = "^0.64.2"}
+tomli = "^2.0.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.0"

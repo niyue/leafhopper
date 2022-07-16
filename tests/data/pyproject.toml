@@ -1,0 +1,13 @@
+[tool.poetry]
+name = "testhopper"
+version = "0.1.1"
+description = "test project"
+authors = ["Yue"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+pytablewriter = {extras = ["html"], version = "^0.64.2"}
+pyarrow = "^8.0.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^6.0"

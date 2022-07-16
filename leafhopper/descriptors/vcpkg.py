@@ -1,18 +1,8 @@
 from leafhopper.descriptors.descriptor import Descriptor
-from leafhopper.descriptors.github_info_loader import GithubInfoLoader
+from leafhopper.descriptors.github_info_loader import GithubInfoLoader, fill_github_info
 import json
 from urllib.request import urlopen
 from leafhopper.logger import logger
-
-
-def has_no_license(pkg_dict):
-    return "license" not in pkg_dict or not pkg_dict["license"]
-
-
-def has_github_homepage(pkg_dict):
-    return "homepage" in pkg_dict and pkg_dict["homepage"].startswith(
-        "https://github.com"
-    )
 
 
 def fill_version_if_needed(pkg_dict):
@@ -56,20 +46,7 @@ class VcpkgDescriptor(Descriptor):
             pkg_json = urlopen(vcpkg_json_url).read()
             pkg_dict = json.loads(pkg_json)
             fill_version_if_needed(pkg_dict)
-
-            if has_no_license(pkg_dict) and has_github_homepage(pkg_dict):
-                loader = GithubInfoLoader(pkg_dict["homepage"])
-                try:
-                    repo_info = loader.load()
-                    license = repo_info["license"]["name"]
-                    pkg_dict["license"] = license
-                    logger.info(
-                        f"loading info from github name={pkg_name} license={license}"
-                    )
-                    if "description" not in pkg_dict:
-                        pkg_dict["description"] = repo_info["description"]
-                except:
-                    pass
+            fill_github_info(pkg_dict)
         except:
             pkg_dict = {"name": pkg_name}
         return pkg_dict

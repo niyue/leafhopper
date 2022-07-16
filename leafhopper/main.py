@@ -1,6 +1,8 @@
 import sys
+import os
 import argparse
 from leafhopper.descriptors.vcpkg import VcpkgDescriptor
+from leafhopper.descriptors.poetry import PoetryDescriptor
 from leafhopper.pkg_table_writer import PkgTableWriter
 from leafhopper.logger import logger
 
@@ -24,6 +26,7 @@ def _leafhopper_parser():
     parser.add_argument(
         "-f",
         "--format",
+        default="markdown",
         help=f"specify the output format, {PkgTableWriter.supported_formats()} are supported",
     )
 
@@ -60,12 +63,21 @@ def _read_descriptor(file):
         content = f.read()
         return content
 
+def _get_descriptor(file):
+    base_name = os.path.basename(file)
+    if base_name == "vcpkg.json":
+        return VcpkgDescriptor
+    elif base_name == "pyproject.toml":
+        return PoetryDescriptor
+    else:
+        raise ValueError(f"Unsupported descriptor {file}. Only vcpkg.json and pyproject.toml files are supported")
+
 
 def process_descriptors(files, format, output):
     _validate_format(format)
     table_writer = PkgTableWriter(format)
     for file in files:
-        descriptor = VcpkgDescriptor()
+        descriptor = _get_descriptor(file)()
         # open file and read content
         descriptor_content = _read_descriptor(file)
         pkg_infos = descriptor.parse(descriptor_content)
