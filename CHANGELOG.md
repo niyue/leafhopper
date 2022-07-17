@@ -1,3 +1,5 @@
+# 0.3.2 - 2022-07-17
+* allow customizing the output columns
 # 0.3.1 - 2022-07-17
 * support maven pom without namespace
 # 0.3.0 - 2022-07-17

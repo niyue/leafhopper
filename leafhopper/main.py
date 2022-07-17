@@ -42,6 +42,16 @@ def _leafhopper_parser():
         "--logging-level",
         help=f"specify the logging level, debug|info|warning|error|critical are supported. Default is `info`",
     )
+
+    parser.add_argument(
+        "-c",
+        "--columns",
+        help=f"""specify the output table header. A comma separated column names, 
+built-in column names are 'name,version,homepage,license,description'. 
+You can change the header to alter the column orders, 
+and non built-in names specifed in the column will be shown as empty.
+""",
+    )
     return parser
 
 
@@ -77,7 +87,7 @@ def _get_descriptor(file):
         raise ValueError(f"Unsupported descriptor {file}. Only vcpkg.json and pyproject.toml files are supported")
 
 
-def process_descriptors(files, format, output):
+def process_descriptors(files, format, output, columns=None):
     _validate_format(format)
     table_writer = PkgTableWriter(format)
     for file in files:
@@ -88,11 +98,11 @@ def process_descriptors(files, format, output):
         if output:
             if isinstance(output, str):
                 with open(output, "w") as f:
-                    table_writer.write(pkg_infos, f)
-            else:  # assume output is a file-like object
-                table_writer.write(pkg_infos, output)
+                    table_writer.write(pkg_infos, f, columns)
+            else: # StringIO
+                table_writer.write(pkg_infos, output, columns)
         else:
-            table_writer.write(pkg_infos)
+            table_writer.write(pkg_infos, columns=columns)
 
 
 def _map_logging_level(level):
@@ -108,15 +118,25 @@ def _map_logging_level(level):
 def _set_logging_level(level):
     logger.setLevel(_map_logging_level(level))
 
+def _get_columns(columns: list) -> list:
+    # split columns by comma and trim each value
+    if columns and columns.strip():
+        columns = columns.split(",")
+        columns = [col.strip() for col in columns]
+    else:
+        columns = None
+    return columns
 
 def main():
     args = parse_sys_args(sys.argv[1:])
     files = args["file"]
     format = args["format"]
+    columns = _get_columns(args["columns"])
+
     logging_level = args["logging_level"]
     _set_logging_level(logging_level)
     output = args.get("output", None)
-    process_descriptors(files, format, output)
+    process_descriptors(files, format, output, columns)
 
 
 if __name__ == "__main__":

@@ -27,6 +27,7 @@ def test_vcpkg_json_with_json_format():
             "format": "json",
             "output": None,
             "logging_level": None,
+            "columns": None,
         },
     )
 
@@ -40,6 +41,7 @@ def test_vcpkg_json_with_invalid_format():
             "format": "no_such_format",
             "output": None,
             "logging_level": None,
+            "columns": None,
         },
     )
 
@@ -55,5 +57,21 @@ def test_logging_level():
             "format": "json",
             "output": None,
             "logging_level": "debug",
+            "columns": None,
+        },
+    )
+
+def test_custom_header():
+    args = parse_sys_args(
+        ["vcpkg.json", "--format", "json", "--columns", "name,version"]
+    )
+    assert_dict_equal(
+        args,
+        {
+            "file": ["vcpkg.json"],
+            "format": "json",
+            "output": None,
+            "logging_level": None,
+            "columns": "name,version",
         },
     )

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "leafhopper"
-version = "0.3.1"
+version = "0.3.2"
 description = "A command line tool for generating project dependencies table"
 authors = ["Yue Ni <niyue.com@gmail.com>"]
 homepage = "https://github.com/niyue/leafhopper"

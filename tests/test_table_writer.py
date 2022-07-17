@@ -17,7 +17,7 @@ def test_write_csv_table():
     output = io.StringIO()
     PkgTableWriter("csv").write(PKG_INFOS, output)
     csv = output.getvalue()
-    assert '"name","description","version","homepage","license"' in csv
+    assert '"name","version","homepage","license","description"' in csv
     assert "librdkafka" in csv
     assert "arrow" in csv
     assert "arrow.apache.org" in csv
@@ -43,3 +43,13 @@ def test_write_all_other_formats():
 def test_supported_formats():
     supported_formats = PkgTableWriter.supported_formats()
     assert set(supported_formats) == {"csv", "html", "json", "latex", "markdown", "md"}
+
+
+def test_write_csv_table_with_custom_columns():
+    output = io.StringIO()
+    PkgTableWriter("csv").write(
+        PKG_INFOS, output, columns=["name", "license", "component"]
+    )
+    csv = output.getvalue()
+    assert '"name","license","component"' in csv
+    assert '"librdkafka","MIT",' in csv

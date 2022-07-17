@@ -22,9 +22,11 @@ class PkgTableWriter(object):
         if format not in WRITER_MAP:
             raise ValueError(f"{format} is not supported")
 
-    def write(self, pkg_infos: list, output=None):
+    def write(self, pkg_infos: list, output=None, columns=None):
         table_name = "Package Dependencies"
-        pkg_attrs = ["name", "description", "version", "homepage", "license"]
+        pkg_attrs = ["name", "version", "homepage", "license", "description"]
+        if columns:
+            pkg_attrs = columns
         # retrieve package attributes from pkg_infos
         pkg_list = [self._get_attrs(pkg_info, pkg_attrs) for pkg_info in pkg_infos]
         writer = WRITER_MAP[self.format]()
