@@ -1,6 +1,7 @@
 from leafhopper.descriptors.descriptor import Descriptor
 from leafhopper.descriptors.extra.extra_info_loader import load_extra_info
 
+from io import BytesIO, StringIO
 try:
     from xml.etree import cElementTree as ElementTree
 except ImportError:
@@ -11,6 +12,15 @@ from leafhopper.logger import logger
 
 NS = "http://maven.apache.org/POM/4.0.0"
 
+def _parse_ignoring_namespace(pom):
+    if isinstance(pom, str):
+        xml = StringIO(pom)
+    else:
+        xml = BytesIO(pom)
+    it = ElementTree.iterparse(xml)
+    for _, el in it:
+        _, _, el.tag = el.tag.rpartition('}') # strip ns
+    return it.root
 
 def _get_pom_path(pkg_info: dict) -> str:
     group_id = pkg_info["group_id"].replace(".", "/")
@@ -19,6 +29,15 @@ def _get_pom_path(pkg_info: dict) -> str:
     return "/".join([group_id, artifact_id, version, f"{artifact_id}-{version}.pom"])
 
 
+def _fill_homepage(pkg_info: dict, tree) -> dict:
+    homepage = tree.find(f"url")
+    if homepage is not None:
+        pkg_info["homepage"] = homepage.text
+    else:
+        scm_url = tree.find(f"scm/url")
+        if scm_url is not None:
+            pkg_info["homepage"] = scm_url.text
+
 def _load_pkg_info_with_version(pkg_info: dict) -> dict:
     pom_path = _get_pom_path(pkg_info)
     pom_url = f"https://search.maven.org/remotecontent?filepath={pom_path}"
@@ -26,16 +45,16 @@ def _load_pkg_info_with_version(pkg_info: dict) -> dict:
     try:
         logger.debug(f"loading pom url={pom_url}")
         pom = urlopen(pom_url).read()
-        tree = ElementTree.fromstring(pom)
-        homepage = tree.find(f"{{{NS}}}url")
-        if homepage is not None:
-            pkg_info["homepage"] = homepage.text
-        description = tree.find(f"{{{NS}}}description")
+        tree = _parse_ignoring_namespace(pom)
+        _fill_homepage(pkg_info, tree)
+        
+        description = tree.find(f"description")
         if description is not None:
             pkg_info["description"] = description.text
-        license = tree.find(f"{{{NS}}}licenses/{{{NS}}}license/{{{NS}}}name")
-        if license is not None:
-            pkg_info["license"] = license.text
+        licenses = tree.findall(f"licenses/license/name")
+        if licenses:
+            license_texts = [license.text for license in licenses]
+            pkg_info["license"] = ", ".join(license_texts)
         load_extra_info(pkg_info)
     except Exception as e:
         logger.debug(f"failed to load pom url={pom_url} error={e}")
@@ -71,17 +90,17 @@ class MvnDescriptor(Descriptor):
     # use element tree API to parse `dependencies` from maven pom file
     def parse(self, pom: str) -> list:
         # parse pom xml string into element tree
-        tree = ElementTree.fromstring(pom)
+        tree = _parse_ignoring_namespace(pom)
         # find the `dependencies` element
-        dependencies = tree.find(f"{{{NS}}}dependencies")
+        dependencies = tree.find(f"dependencies")
         deps = []
         # iterate through each `dependency` element
         for dependency in dependencies:
             pkg_info = {}
             # get groupId, artifactId, version
-            group_id = dependency.find(f"{{{NS}}}groupId").text
-            artifact_id = dependency.find(f"{{{NS}}}artifactId").text
-            version_element = dependency.find(f"{{{NS}}}version")
+            group_id = dependency.find(f"groupId").text
+            artifact_id = dependency.find(f"artifactId").text
+            version_element = dependency.find(f"version")
             if version_element:
                 version = version_element.text
             else:

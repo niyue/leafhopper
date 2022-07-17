@@ -46,7 +46,24 @@ def test_load_mvn_package():
     mvn_desp = MvnDescriptor()
     pom_xml = open("tests/data/pom.xml").read()
     pkg_infos = mvn_desp.parse(pom_xml)
-    assert len(pkg_infos) == 6
+    assert len(pkg_infos) == 4
     names = {pkg_info["name"] for pkg_info in pkg_infos}
     for pkg in ["com.google.guava.failureaccess", "com.google.code.findbugs.jsr305"]:
         assert pkg in names
+
+
+def test_load_pkg_info_with_version_with_scm_url_multi_licenses():
+    # this pom 1) has no maven namespace 2) has multiple licenses 3) has github scm url
+    pkg_info = _load_pkg_info_with_version(
+        {
+            "group_id": "com.h2database",
+            "artifact_id": "h2",
+            "version": "2.1.214",
+        }
+    )
+    assert pkg_info["artifact_id"] == "h2"
+    assert pkg_info["homepage"] == "https://h2database.com"
+    # multiple licenses will be shown as a comma separated string
+    assert pkg_info["license"] == "MPL 2.0, EPL 1.0"
+    assert pkg_info["description"] == "H2 Database Engine"
+
