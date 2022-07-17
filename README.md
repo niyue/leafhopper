@@ -79,5 +79,8 @@ leaphopper /path/to/pom.xml --columns name,component,version,license,homepage,de
 # Changelog
 [Changelog](CHANGELOG.md)
 
-# Unknown issues
+# Known issues
 * Some open source libraries, doesn't have the license information available in the project descriptor (or in `github.com`/`sourceforge.net`), and the cell will leave it blank and you have to manually fill it.
+
+# TODO
+* Support more project types, such as `npm`'s `package.json` and `pip`'s `requirements.txt`
