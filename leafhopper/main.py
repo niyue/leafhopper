@@ -3,6 +3,7 @@ import os
 import argparse
 from leafhopper.descriptors.vcpkg import VcpkgDescriptor
 from leafhopper.descriptors.poetry import PoetryDescriptor
+from leafhopper.descriptors.mvn import MvnDescriptor
 from leafhopper.pkg_table_writer import PkgTableWriter
 from leafhopper.logger import logger
 
@@ -65,10 +66,13 @@ def _read_descriptor(file):
 
 def _get_descriptor(file):
     base_name = os.path.basename(file)
-    if base_name == "vcpkg.json":
-        return VcpkgDescriptor
-    elif base_name == "pyproject.toml":
-        return PoetryDescriptor
+    descriptors = {
+        "vcpkg.json": VcpkgDescriptor,
+        "pyproject.toml": PoetryDescriptor,
+        "pom.xml": MvnDescriptor,
+    }
+    if base_name in descriptors:
+        return descriptors[base_name]
     else:
         raise ValueError(f"Unsupported descriptor {file}. Only vcpkg.json and pyproject.toml files are supported")
 

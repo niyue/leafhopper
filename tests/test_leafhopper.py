@@ -14,3 +14,9 @@ def test_process_pyproject():
     process_descriptors(["tests/data/pyproject.toml"], "json", output)
     table = output.getvalue()
     assert "pyarrow" in table
+
+def test_process_maven_pom():
+    output = io.StringIO()
+    process_descriptors(["tests/data/pom.xml"], "json", output)
+    table = output.getvalue()
+    assert "findbugs" in table

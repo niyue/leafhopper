@@ -1,5 +1,5 @@
 from leafhopper.descriptors.descriptor import Descriptor
-from leafhopper.descriptors.github_info_loader import GithubInfoLoader, fill_github_info
+from leafhopper.descriptors.extra.extra_info_loader import load_extra_info
 import json
 from urllib.request import urlopen
 from leafhopper.logger import logger
@@ -31,9 +31,9 @@ def _load_pkg_info(pkg_info: dict) -> dict:
             "summary", pypi_info.get("description", None)
         )
         pkg_info["license"] = pypi_info.get("license", None)
-        fill_github_info(pkg_info)
-    except:
-        return pkg_info
+        load_extra_info(pkg_info)
+    except Exception as e:
+        logger.debug(f"failed to load pypi package name={pkg_name} error={e}")
     return pkg_info
 
 

@@ -1,10 +1,11 @@
 [tool.poetry]
 name = "leafhopper"
-version = "0.2.0"
+version = "0.3.0"
 description = "A command line tool for generating project dependencies table"
 authors = ["Yue Ni <niyue.com@gmail.com>"]
 homepage = "https://github.com/niyue/leafhopper"
 license = "Apache-2.0"
+readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.9"
