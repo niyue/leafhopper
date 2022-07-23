@@ -1,4 +1,5 @@
 from leafhopper.main import process_descriptors, _get_columns
+import os
 import io
 
 
@@ -44,5 +45,16 @@ def test_process_pyproject():
 def test_process_maven_pom():
     output = io.StringIO()
     process_descriptors(["tests/data/pom.xml"], "json", output)
+    table = output.getvalue()
+    assert "findbugs" in table
+
+def test_process_maven_pom_with_combined():
+    output = io.StringIO()
+    process_descriptors(["tests/data/pom.xml"], "json", output, combined_license=True)
+    assert os.path.exists("LICENSES.txt")
+
+def test_process_maven_pom_with_overrides():
+    output = io.StringIO()
+    process_descriptors(["tests/data/pom.xml"], "json", output, extra_pkgs_file="tests/data/extra.json")
     table = output.getvalue()
     assert "findbugs" in table

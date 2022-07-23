@@ -1,5 +1,4 @@
 from leafhopper.descriptors.descriptor import Descriptor
-from leafhopper.descriptors.extra.extra_info_loader import load_extra_info
 import json
 from urllib.request import urlopen
 from leafhopper.logger import logger
@@ -46,7 +45,6 @@ class VcpkgDescriptor(Descriptor):
             pkg_json = urlopen(vcpkg_json_url).read()
             pkg_dict = json.loads(pkg_json)
             fill_version_if_needed(pkg_dict)
-            load_extra_info(pkg_dict)
         except Exception as e:
             logger.debug(f"failed to load vcpkg package name={pkg_name} vcpkg_json_url={vcpkg_json_url} error={e}")
             pkg_dict = {"name": pkg_name}

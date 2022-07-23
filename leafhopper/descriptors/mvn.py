@@ -1,5 +1,4 @@
 from leafhopper.descriptors.descriptor import Descriptor
-from leafhopper.descriptors.extra.extra_info_loader import load_extra_info
 
 from io import BytesIO, StringIO
 try:
@@ -55,7 +54,6 @@ def _load_pkg_info_with_version(pkg_info: dict) -> dict:
         if licenses:
             license_texts = [license.text for license in licenses]
             pkg_info["license"] = ", ".join(license_texts)
-        load_extra_info(pkg_info)
     except Exception as e:
         logger.debug(f"failed to load pom url={pom_url} error={e}")
     return pkg_info

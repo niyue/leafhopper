@@ -8,11 +8,21 @@ GITHUB_REPO_HOMEPAGE = "https://github.com/twbs/bootstrap"
 
 def test_github_info_loader():
     loader = GithubInfoLoader()
-    repo = loader.load({"name": "bootstrap", "homepage": GITHUB_REPO_HOMEPAGE})
+    pkg_info = {"name": "bootstrap", "homepage": GITHUB_REPO_HOMEPAGE}
+    repo = loader.load(pkg_info, False)
     assert repo["name"] == "bootstrap"
     assert "license" in repo
+    assert "license" in pkg_info
     assert "description" in repo
     assert repo["license"]["name"] == "MIT License"
+
+def test_github_info_loader_loading_license_text():
+    loader = GithubInfoLoader()
+    pkg_info = {"name": "bootstrap", "homepage": GITHUB_REPO_HOMEPAGE}
+    repo = loader.load(pkg_info, True)
+    assert repo["name"] == "bootstrap"
+    assert "license_text" in pkg_info
+    assert "license_url" in pkg_info
 
 
 def test_github_homepage():

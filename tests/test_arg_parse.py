@@ -29,6 +29,7 @@ def test_vcpkg_json_with_json_format():
             "logging_level": None,
             "columns": None,
             "extra": None,
+            "combine": False,
         },
     )
 
@@ -44,6 +45,7 @@ def test_vcpkg_json_with_invalid_format():
             "logging_level": None,
             "columns": None,
             "extra": None,
+            "combine": False,
         },
     )
 
@@ -61,6 +63,7 @@ def test_logging_level():
             "logging_level": "debug",
             "columns": None,
             "extra": None,
+            "combine": False,
         },
     )
 
@@ -77,5 +80,57 @@ def test_custom_header():
             "logging_level": None,
             "columns": "name,version",
             "extra": None,
+            "combine": False,
+        },
+    )
+
+def test_extra():
+    args = parse_sys_args(
+        ["vcpkg.json", "--format", "json", "--extra", "extra.json"]
+    )
+    assert_dict_equal(
+        args,
+        {
+            "file": ["vcpkg.json"],
+            "format": "json",
+            "output": None,
+            "logging_level": None,
+            "columns": None,
+            "extra": "extra.json",
+            "combine": False,
+        },
+    )
+
+def test_combine_license():
+    args = parse_sys_args(
+        ["vcpkg.json", "--format", "json", "--combine"]
+    )
+    assert_dict_equal(
+        args,
+        {
+            "file": ["vcpkg.json"],
+            "format": "json",
+            "output": None,
+            "logging_level": None,
+            "columns": None,
+            "extra": None,
+            "combine": True,
+        },
+    )
+
+def test_default_combine_license_is_false():
+    args = parse_sys_args(
+        ["vcpkg.json", "--format", "json"]
+    )
+    assert_dict_equal(
+        args,
+        {
+            "file": ["vcpkg.json"],
+            "format": "json",
+            "output": None,
+            "logging_level": None,
+            "columns": None,
+            "extra": None,
+            "combine": False,
         },
     )

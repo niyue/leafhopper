@@ -27,7 +27,7 @@ class SourceForgeInfoLoader(ExtraInfoLoader):
         self.project_id = extract_sourceforge_project_id(pkg_dict)
         return self.project_id
 
-    def load(self, pkg_dict: dict) -> dict:
+    def load(self, pkg_dict: dict, load_license_text: bool = False) -> dict:
         assert self.project_id is not None
         # https://sourceforge.net/p/forge/documentation/Allura%20API/
         project_api_url = f"https://sourceforge.net/rest/p/{self.project_id}"

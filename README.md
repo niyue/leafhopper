@@ -12,6 +12,7 @@ The tool parses the project descriptor, based on different project types (`poetr
 * support overriding the list of dependencies from the project descriptor when you cannot get correct information from the project descriptor
 * support customizing the output columns
 * multiple outout formats
+* generate a combined license file from all the licenses of the dependencies
 
 # Installation
 ```
@@ -36,7 +37,8 @@ leafhopper /path/to/project/descriptor
   * `license`, optional
   * `homepage`, optional
   * `description`, optional
-
+  * `disclosed_source`, optional, a url to the discolosed source for some license requirement such as MPL
+* `--combine`: whether to generate a combined license file. Use `true`/`false` to toggle it. Default is false.
 * `--help`: show the help message
 
 ## examples
@@ -65,6 +67,16 @@ leaphopper /path/to/pom.xml --columns name,component,version,license,homepage,de
 leaphopper /path/to/pom.xml --extra=tests/data/extra.json
 ```
 
+6. generate a combined license file so that you can put it as part of your project
+```
+leaphopper /path/to/pom.xml --combine=true
+```
+It will generate a file called `LICENSES.txt` with all the licenses information of the dependencies.
+
+7. [advanced] when providing both `--extra` and `--columns`, you can get any information from the extra JSON file to be shown in the output table. For example, if you would like to add a `disclosed_source` column, you can specify this property in the `extra.json` file and specify the `disclosed_source` column in the `--columns` argument.
+```
+leaphopper /path/to/vcpkg.json --extra=/extra/with/disclosed/sources/extra.json --columns name,version,homepage,license,description,disclosed_source
+```
 
 # Supported formats
 * markdown

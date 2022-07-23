@@ -1,5 +1,4 @@
 from leafhopper.descriptors.descriptor import Descriptor
-from leafhopper.descriptors.extra.extra_info_loader import load_extra_info
 import json
 from urllib.request import urlopen
 from leafhopper.logger import logger
@@ -20,7 +19,7 @@ def _get_home_page(pypi_info: dict) -> None:
 def _load_pkg_info(pkg_info: dict) -> dict:
     pkg_name = pkg_info["name"]
     pypi_project_url = f"https://pypi.org/pypi/{pkg_name}/json"
-    logger.info(f"processing pypi package name={pkg_name}")
+    logger.info(f"processing pypi package name={pkg_name} url={pypi_project_url}")
     # retrieve the url content via http request
     try:
         pkg_json = urlopen(pypi_project_url).read()
@@ -31,7 +30,6 @@ def _load_pkg_info(pkg_info: dict) -> dict:
             "summary", pypi_info.get("description", None)
         )
         pkg_info["license"] = pypi_info.get("license", None)
-        load_extra_info(pkg_info)
     except Exception as e:
         logger.debug(f"failed to load pypi package name={pkg_name} error={e}")
     return pkg_info

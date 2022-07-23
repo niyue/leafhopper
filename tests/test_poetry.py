@@ -23,7 +23,6 @@ def test_load_pkg_info_with_project_urls_home_page_and_license_missing():
     assert pkg_info["name"] == "tomli"
     assert pkg_info["version"] == "0.2.0"
     assert pkg_info["homepage"] == "https://github.com/hukkin/tomli"
-    assert pkg_info["license"] == "MIT License"
 
 
 def test_load_pkg_info_with_license_at_github():
@@ -31,7 +30,6 @@ def test_load_pkg_info_with_license_at_github():
     assert pkg_info["name"] == "fastapi"
     assert pkg_info["version"] == "0.70.0"
     assert pkg_info["homepage"] == "https://github.com/tiangolo/fastapi"
-    assert pkg_info["license"] == "MIT License"
 
 
 def test_load_pkg_info_with_source_code_link_as_homepage():
@@ -39,4 +37,3 @@ def test_load_pkg_info_with_source_code_link_as_homepage():
     assert pkg_info["name"] == "structlog"
     assert pkg_info["version"] == "21.5.0"
     assert pkg_info["homepage"] == "https://github.com/hynek/structlog"
-    assert pkg_info["license"] == "Other"

@@ -1,0 +1,13 @@
+{% for pkg in pkg_infos -%}
+# [{{pkg["name"]}}]
+{% if "homepage" in pkg -%}
+{{pkg.get("homepage", "")}}
+{%- endif -%}
+{%- if "disclosed_source" in pkg %}
+Disclosed source: {{pkg["disclosed_source"]}}
+{%- endif %}
+### LICENSE
+{{pkg.get("license_text", pkg.get("license_url", pkg.get("license", "")))}}
+
+-------------------------------------------------
+{% endfor %}

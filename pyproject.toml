@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "leafhopper"
-version = "0.4.0"
+version = "0.5.0"
 description = "A command line tool for generating project dependencies table"
 authors = ["Yue Ni <niyue.com@gmail.com>"]
 homepage = "https://github.com/niyue/leafhopper"
@@ -11,6 +11,7 @@ readme = "README.md"
 python = "^3.9"
 pytablewriter = {extras = ["html"], version = "^0.64.2"}
 tomli = "^2.0.1"
+Jinja2 = "^3.1.2"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.0"

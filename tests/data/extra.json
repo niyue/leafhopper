@@ -2,11 +2,16 @@
   "overrides": [
     {
       "name": "com.google.code.findbugs.jsr305",
-      "license": "LGPL"
+      "license": "LGPL",
+      "disclosed_source": "https://example.com/my/copy/of/findbugs"
     },
     {
       "name": "guava",
+      "overridden_name": "com.google.guava",
       "homepage": "https://github.com/google/guava"
     }
+  ],
+  "hiddens": [
+    "junit"
   ]
 }
