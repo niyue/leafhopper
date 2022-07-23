@@ -1,3 +1,5 @@
+# 0.5.1 - 2022-07-23
+* Support specifying github token in environment variable to avoid rate limiting
 # 0.5.0 - 2022-07-23
 * Generate a combined license file from all the licenses of the dependencies
 # 0.4.0 - 2022-07-23

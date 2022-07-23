@@ -13,6 +13,7 @@ The tool parses the project descriptor, based on different project types (`poetr
 * support customizing the output columns
 * multiple outout formats
 * generate a combined license file from all the licenses of the dependencies
+* github token can be provided in environment variable to avoid github API rate limiting
 
 # Installation
 ```
@@ -106,6 +107,17 @@ leaphopper /path/to/vcpkg.json --extra=/extra/with/disclosed/sources/extra.json 
     * https://vcpkg.readthedocs.io/en/latest/specifications/manifests/
 * more project types such as npm will be supported in the future
 
+# Github API rating limit
+If you have a really large project, you may encounter github API rate limiting. You can provide a github personal token in the environment variables to avoid this:
+  * `LEAFHOPPER_GITHUB_USERNAME`
+  * `LEAFHOPPER_GITHUB_PASSWORD`
+  You can export these variables to your shell environment like this:
+  ```
+  export LEAFHOPPER_GITHUB_USERNAME={your_github_user_name}
+  export LEAFHOPPER_GITHUB_PASSWORD={your_personal_token} # something like `ghp_pciFGDQlXAqDGNBXHsUbHHHZly7cf71ZKEVg`
+  ```
+To create a Github personal token, follow the instructions [here](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
+  * Unless you need to access some private project information in Github, you can keep the personal token's permission minimal in Github since it only needs to be authencated against Github so that you can use higher the rate limit (see more details [here](https://docs.github.com/en/rest/overview/resources-in-the-rest-api#requests-from-personal-accounts)).
 
 # Changelog
 [Changelog](CHANGELOG.md)
