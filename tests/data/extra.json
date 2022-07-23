@@ -1,0 +1,12 @@
+{
+  "overrides": [
+    {
+      "name": "com.google.code.findbugs.jsr305",
+      "license": "LGPL"
+    },
+    {
+      "name": "guava",
+      "homepage": "https://github.com/google/guava"
+    }
+  ]
+}

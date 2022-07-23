@@ -6,6 +6,7 @@ from leafhopper.descriptors.poetry import PoetryDescriptor
 from leafhopper.descriptors.mvn import MvnDescriptor
 from leafhopper.pkg_table_writer import PkgTableWriter
 from leafhopper.logger import logger
+from leafhopper.extra_pkgs import ExtraPkgs
 
 
 # import importlib.metadata
@@ -52,6 +53,12 @@ You can change the header to alter the column orders,
 and non built-in names specifed in the column will be shown as empty.
 """,
     )
+
+    parser.add_argument(
+        "-e",
+        "--extra",
+        help=f"optional. specify a json file for extra pkgs to override the pkgs in the descriptor",
+    )
     return parser
 
 
@@ -87,7 +94,7 @@ def _get_descriptor(file):
         raise ValueError(f"Unsupported descriptor {file}. Only vcpkg.json and pyproject.toml files are supported")
 
 
-def process_descriptors(files, format, output, columns=None):
+def process_descriptors(files, format, output, columns=None, extra_pkgs_file=None):
     _validate_format(format)
     table_writer = PkgTableWriter(format)
     for file in files:
@@ -95,6 +102,10 @@ def process_descriptors(files, format, output, columns=None):
         # open file and read content
         descriptor_content = _read_descriptor(file)
         pkg_infos = descriptor.parse(descriptor_content)
+        # override pkg_infos with provided overrides
+        if extra_pkgs_file:
+            extra_pkgs = ExtraPkgs(extra_pkgs_file)
+            pkg_infos = extra_pkgs.override(pkg_infos)
         if output:
             if isinstance(output, str):
                 with open(output, "w") as f:
@@ -131,12 +142,13 @@ def main():
     args = parse_sys_args(sys.argv[1:])
     files = args["file"]
     format = args["format"]
+    extra_pkgs_file = args["extra"]
     columns = _get_columns(args["columns"])
 
     logging_level = args["logging_level"]
     _set_logging_level(logging_level)
     output = args.get("output", None)
-    process_descriptors(files, format, output, columns)
+    process_descriptors(files, format, output, columns, extra_pkgs_file)
 
 
 if __name__ == "__main__":

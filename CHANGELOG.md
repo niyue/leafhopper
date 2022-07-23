@@ -1,3 +1,5 @@
+# 0.4.0 - 2022-07-23
+* allow providing a canonical list of dependencies information to override the one in the project descriptor
 # 0.3.2 - 2022-07-17
 * allow customizing the output columns
 # 0.3.1 - 2022-07-17

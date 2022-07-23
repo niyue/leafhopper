@@ -28,6 +28,7 @@ def test_vcpkg_json_with_json_format():
             "output": None,
             "logging_level": None,
             "columns": None,
+            "extra": None,
         },
     )
 
@@ -42,6 +43,7 @@ def test_vcpkg_json_with_invalid_format():
             "output": None,
             "logging_level": None,
             "columns": None,
+            "extra": None,
         },
     )
 
@@ -58,6 +60,7 @@ def test_logging_level():
             "output": None,
             "logging_level": "debug",
             "columns": None,
+            "extra": None,
         },
     )
 
@@ -73,5 +76,6 @@ def test_custom_header():
             "output": None,
             "logging_level": None,
             "columns": "name,version",
+            "extra": None,
         },
     )
